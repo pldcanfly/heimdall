@@ -7,16 +7,21 @@
 {{ define "body" }}
   <body>
 
-    {{ block "header" . }} 
-      header base.html
-    {{ end }}
+    <header>
+      {{ block "header" . }} 
+        
+      {{ end }}
+    </header>
+
     {{ block "content" . }} 
       base.html
     {{ end }}
-    {{ block "footer" . }} 
-      footer base.html
-    {{ end }}
 
+    <footer>
+      {{ block "footer" . }} 
+        footer base.html
+      {{ end }}
+    </footer>
   </body>
 {{ end }} 
 
