@@ -1,0 +1,25 @@
+{{ define "head" }}
+  <head>
+    <title>{{ template "title" }}</title>
+  </head>
+{{ end }} 
+
+{{ define "body" }}
+  <body>
+
+    {{ block "header" . }} 
+      header base.html
+    {{ end }}
+    {{ block "content" . }} 
+      base.html
+    {{ end }}
+    {{ block "footer" . }} 
+      footer base.html
+    {{ end }}
+
+  </body>
+{{ end }} 
+
+{{ define "title" }}
+  Heimdall 
+{{ end }}
