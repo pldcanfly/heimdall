@@ -7,6 +7,6 @@ type Watcher interface {
 }
 
 type WatchReport struct {
-	StatusCode   int
+	Online       bool
 	ResponseTime time.Duration
 }

@@ -1,0 +1,8 @@
+  <div class="responsegraph h-52 w-80 border border-black border-dotted flex gap-2 items-end">
+
+        {{ range .Timepoints }}
+            <div class="{{ if .Online }}bg-green-700{{ else }}bg-red-700{{end}}" style="width: calc(10% - 0.5rem); height: {{ .ResponseTimePercent }}%">
+                <div class="text-xs rotate-45 ">{{ .ResponseTime }}</div>
+            </div>
+        {{ end }}
+    </div>
