@@ -1,27 +1,18 @@
-build: clean copy buildcss
+prepare: clean copy buildcss
 	go build -o bin/heimdall
-
-	
 
 clean:
 	rm -rf ./bin/*
 	
 copy: 
-	mkdir -p ./bin/frontpage/components
-	cp -r ./frontpage/components/* ./bin/frontpage/components
-	mkdir -p ./bin/frontpage/static
-	cp -r ./frontpage/static/* ./bin/frontpage/static
-	mkdir -p ./bin/frontpage/templates
-	cp -r ./frontpage/templates/* ./bin/frontpage/templates
+	scripts/copy.sh
 
 buildcss: 
-	mkdir -p ./bin/frontpage/static/css
-	./tailwindcss -i frontpage/css/style.css -o frontpage/static/css/style.css
+	scripts/tailwind.sh
 
 watchcss:
-		mkdir -p ./bin/frontpage/static/css
-	./tailwindcss -i frontpage/css/style.css -o frontpage/static/css/style.css --watch
+	scripts/tailwind.sh -w
 
 
-run: build
+run: prepare
 	./bin/heimdall

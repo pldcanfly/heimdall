@@ -1,12 +1,53 @@
 package watcher
 
-import "time"
+import (
+	"time"
+
+	"github.com/pldcanfly/heimdall/storage"
+)
 
 type Watcher interface {
-	Ping()
+	Ping() error
+	Store(report WatchReport) error
+	Watch()
 }
 
 type WatchReport struct {
 	Online       bool
 	ResponseTime time.Duration
+}
+
+type WatchMaster struct {
+	store    storage.Storage
+	Watchers []Watcher
+}
+
+func NewWatchMaster(store storage.Storage) (*WatchMaster, error) {
+	wm := &WatchMaster{store: store}
+	wm.initWatchers()
+
+	return wm, nil
+}
+
+func (w *WatchMaster) Watch() {
+	for _, watcher := range w.Watchers {
+		go watcher.Watch()
+	}
+}
+
+func (w *WatchMaster) AddWatcher(watcher Watcher) {
+	w.Watchers = append(w.Watchers, watcher)
+}
+
+func (w *WatchMaster) initWatchers() {
+	watchers, err := w.store.GetWatchers()
+	if err != nil {
+		panic(err)
+	}
+
+	for i := range watchers {
+		w.AddWatcher(NewHTTPWatcher(watchers[i].ID, watchers[i].URL, w.store))
+
+	}
+
 }

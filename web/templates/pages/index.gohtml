@@ -1,0 +1,14 @@
+{{ template "base" . }}
+
+{{ block "content" . }}
+    <h2>Active Watchers:</h2>
+    {{ range .Watchers }}
+        <div>
+            <h3>#{{.Watcher.ID}} - {{ .Watcher.URL }}</h3>
+            {{ .Watcher.Watcher }}
+
+                {{ template "components/responsegraph" .ResponseGraph }}
+
+        </div>
+    {{ end }}
+{{end}}
