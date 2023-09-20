@@ -23,13 +23,12 @@ type WatchMaster struct {
 }
 
 func NewWatchMaster(store storage.Storage) (*WatchMaster, error) {
-	wm := &WatchMaster{store: store}
-	wm.initWatchers()
-
-	return wm, nil
+	return &WatchMaster{store: store}, nil
 }
 
 func (w *WatchMaster) Watch() {
+	w.initWatchers()
+
 	for _, watcher := range w.Watchers {
 		go watcher.Watch()
 	}

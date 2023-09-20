@@ -1,14 +1,22 @@
 package server
 
 import (
-	"math"
 	"net/http"
-	"strconv"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
 	"github.com/pldcanfly/heimdall/storage"
 )
+
+type Handler struct {
+	store storage.Storage
+}
+
+func NewHandler(store storage.Storage) *Handler {
+	h := &Handler{store: store}
+
+	return h
+}
 
 type ResponseGraph struct {
 	ID        int
@@ -26,20 +34,25 @@ type RootData struct {
 	Watchers []WatcherData
 }
 
+type IDRequest struct {
+	ID int `param:"id"`
+}
+
 type WatcherData struct {
 	Watcher       storage.WatcherRecord
 	ResponseGraph ResponseGraph
 }
 
-func handleGetRoot(s *Server, w http.ResponseWriter, r *http.Request) error {
+// GET /
+func (h *Handler) GetRoot(c echo.Context) error {
 	res := make([]WatcherData, 0)
-	watchers, err := s.store.GetWatchers()
+	watchers, err := h.store.GetWatchers()
 	if err != nil {
 		return err
 	}
 
 	for i := range watchers {
-		rg, err := buildReponseGraph(s, watchers[i].ID, r)
+		rg, err := buildReponseGraph(h.store, watchers[i].ID)
 		if err != nil {
 			return err
 		}
@@ -51,64 +64,31 @@ func handleGetRoot(s *Server, w http.ResponseWriter, r *http.Request) error {
 
 	}
 
-	s.executeTemplate(w, "index.gohtml", RootData{
+	return c.Render(http.StatusOK, "index.gohtml", RootData{
 		Watchers: res,
 	})
-	return nil
 }
 
-func buildReponseGraph(s *Server, watcher int, r *http.Request) (ResponseGraph, error) {
+func (h *Handler) GetResponsegraph(c echo.Context) error {
 
-	tps := make([]Response, 0)
-	max := time.Duration(0)
-	responses, err := s.store.GetLastResponses(watcher, 10)
+	var request IDRequest
+	err := c.Bind(&request)
 	if err != nil {
-		return ResponseGraph{}, err
+		return c.String(http.StatusBadRequest, "bad request")
 	}
 
-	for i := range responses {
-		tps = append(tps, Response{
-			Online:       responses[i].Online,
-			ResponseTime: responses[i].ReponseTime,
-		})
-		if max < tps[i].ResponseTime {
-			max = tps[i].ResponseTime
-		}
-
-	}
-
-	for i := range tps {
-		tps[i].ResponseTimePercent = int(math.Round(float64(time.Duration.Milliseconds(tps[i].ResponseTime)) / float64(time.Duration.Milliseconds(max)) * 100))
-	}
-
-	return ResponseGraph{
-		ID:        watcher,
-		Responses: tps,
-		Max:       int(time.Duration.Milliseconds(max)),
-	}, nil
-
-}
-
-func handleGetResponsegraph(s *Server, w http.ResponseWriter, r *http.Request) error {
-
-	params := mux.Vars(r)
-
-	id, err := strconv.Atoi(params["id"])
+	rg, err := buildReponseGraph(h.store, request.ID)
 	if err != nil {
 		return err
 	}
 
-	rg, err := buildReponseGraph(s, id, r)
-	if err != nil {
-		return err
-	}
+	//h.executeTemplate(w, "responsegraph.gohtml", rg)
 
-	s.executeTemplate(w, "responsegraph.gohtml", rg)
-
-	return nil
+	return c.Render(http.StatusOK, "responsegraph.gohtml", rg)
 }
 
-func handleGetTest(s *Server, w http.ResponseWriter, r *http.Request) error {
+func (h *Handler) GetTest(c echo.Context) error {
+
 	// executeComponentTemplate(w, "button", nil)
-	return nil
+	return c.JSON(http.StatusOK, "test")
 }
