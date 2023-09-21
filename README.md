@@ -4,7 +4,7 @@ This is a project to pratice GO. **99% not production ready!!**
 
 A simple tool to monitor HTTP and API-Uptimes and present them in a dashboard.
 
-Also... learning HTMX and Tailwind.
+Also... trying out HTMX and Tailwind.
 
 ## Planned
 
