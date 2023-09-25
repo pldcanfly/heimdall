@@ -36,7 +36,7 @@ func (w *HTTPWatcher) Ping() error {
 func (w *HTTPWatcher) Watch() {
 	for {
 		w.Ping()
-		time.Sleep(30 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 }
 

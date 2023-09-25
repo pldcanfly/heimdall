@@ -23,6 +23,7 @@ func NewTemplate() *Template {
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	fmt.Printf("rendering template: %v\n", name)
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
@@ -36,22 +37,10 @@ func (h *Template) initTemplates() error {
 }
 
 func parseTemplates() (*template.Template, error) {
-	t, err := template.ParseGlob("web/templates/base/*")
+	t, err := template.ParseGlob("web/templates/**/*")
 	if err != nil {
 
-		return nil, fmt.Errorf("base templates: %v", err)
-	}
-
-	t, err = t.ParseGlob("web/components/*")
-	if err != nil {
-
-		return nil, fmt.Errorf("component templates: %v", err)
-	}
-
-	t, err = t.ParseGlob("web/templates/pages/*")
-	if err != nil {
-
-		return nil, fmt.Errorf("page templates: %v", err)
+		return nil, fmt.Errorf("parse templates: %v", err)
 	}
 
 	return t, nil

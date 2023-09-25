@@ -1,9 +1,7 @@
-{{ template "base" . }}
-
-{{ block "content" . }}
+{{ define "content" }}
     <h2>Active Watchers:</h2>
     {{ range .Watchers }}
-        <div>
+        <div class="watchercontainer">
             <h3>#{{.Watcher.ID}} - {{ .Watcher.URL }}</h3>
             {{ .Watcher.Watcher }}
 
@@ -12,3 +10,5 @@
         </div>
     {{ end }}
 {{end}}
+
+{{ template "base" . }}

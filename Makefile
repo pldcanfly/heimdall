@@ -8,11 +8,11 @@ copy:
 	scripts/copy.sh
 
 buildcss: 
-	scripts/tailwind.sh
+	scripts/buildcss.sh
 
 watchcss:
-	scripts/tailwind.sh -w
+	scripts/buildcss.sh -w
 
 
 run: prepare
-	./bin/heimdall
+	cd ./bin && ./heimdall

@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pldcanfly/heimdall/storage"
@@ -42,11 +41,8 @@ func (s *Server) Serve() {
 		panic("couldn't init router")
 	}
 
-	s.router.Logger.Fatal(s.router.Start(":1323"))
-	if err := http.ListenAndServe(s.listenAddr, s.router); err != nil {
-		fmt.Printf("%v", err)
-		panic("could not start listener")
-	}
+	s.router.Logger.Fatal(s.router.Start(s.listenAddr))
+
 }
 
 // func (s *Server) makeHandleFunc(f Handler) (c echo.Context) {
@@ -60,8 +56,8 @@ func (s *Server) Serve() {
 
 // }
 
-func print404(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(404)
-	w.Write([]byte("404 not found"))
-}
+// func print404(w http.ResponseWriter) {
+// 	w.Header().Set("Content-Type", "text/html")
+// 	w.WriteHeader(404)
+// 	w.Write([]byte("404 not found"))
+// }
