@@ -8,10 +8,11 @@ import (
 
 func main() {
 	ch := make(chan struct{})
-	store, err := storage.NewMemorystore()
+	store, err := storage.NewPostgresStore()
 	if err != nil {
 		panic(err)
 	}
+	defer store.Close()
 	server := server.NewServer("127.0.0.1:8080", store)
 	go server.Serve()
 	watchmaster, err := watcher.NewWatchMaster(store)

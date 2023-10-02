@@ -8,7 +8,7 @@
 
         {{ range .Responses }}
             <div class="item {{ if .Online }}active{{end}}" style="height: {{ .ResponseTimePercent }}%">
-                <div class="label">{{ .ResponseTime }}</div>
+                <div class="label">{{ .ResponseTime }}ms</div>
             </div>
         {{ end }}
     </div>

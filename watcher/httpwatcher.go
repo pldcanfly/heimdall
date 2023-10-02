@@ -22,20 +22,34 @@ func (w *HTTPWatcher) Ping() error {
 	start := time.Now()
 	res, err := http.Get(w.URL)
 	if err != nil {
+		w.Store(WatchReport{
+			Online:       false,
+			ResponseTime: time.Since(start),
+		})
+
 		return fmt.Errorf("httpwatcher: Ping failed %v", err)
+
 	}
 	defer res.Body.Close()
+	fmt.Printf("httpwatcher: %s %s %d\n", w.URL, res.Status, res.StatusCode)
 
-	w.Store(WatchReport{
+	err = w.Store(WatchReport{
 		Online:       res.StatusCode < 400,
 		ResponseTime: time.Since(start),
 	})
+	if err != nil {
+		return fmt.Errorf("httpwatcher: Store failed %v", err)
+	}
+
 	return nil
 }
 
 func (w *HTTPWatcher) Watch() {
 	for {
-		w.Ping()
+		err := w.Ping()
+		if err != nil {
+			fmt.Println(err)
+		}
 		time.Sleep(5 * time.Second)
 	}
 }

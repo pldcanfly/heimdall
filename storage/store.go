@@ -3,6 +3,7 @@ package storage
 import "time"
 
 type Storage interface {
+	Close()
 	GetWatchers() ([]WatcherRecord, error)
 	InsertWatcher(url string, watcher string) (WatcherRecord, error)
 	GetLastResponses(watcher int, len int) ([]ResponseRecord, error)

@@ -41,6 +41,10 @@ func (s *MemoryStorage) GetWatchers() ([]WatcherRecord, error) {
 	return s.Watchers, nil
 }
 
+func (s *MemoryStorage) Close() {
+
+}
+
 func (s *MemoryStorage) InsertWatcher(url string, watcher string) (WatcherRecord, error) {
 	record := WatcherRecord{
 		ID:      len(s.Watchers) + 1,

@@ -8,9 +8,10 @@ Also... trying out HTMX.
 
 ## Planned
 
-- Write results persistently to a Database
+- ~~Write results persistently to a Database~~
+- Provide a second short-term-storage for the latest results and aggregate and store to long-term-storage
 - Outsource the config from hardcoded to configfiles
-- Clean up the templatehandling
-- Maybe switch template engine
+- ~~Clean up the templatehandling~~
+- ~~Maybe switch template engine~~
 - Implement APIWatcher to listen to watch a /api/health - route that will be implemented in SMDCMS to monitor more then just responsttime
 - Clean up EVERYTHING

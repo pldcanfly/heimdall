@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
+	"html/template"
 	"io"
-	"text/template"
 
 	"github.com/labstack/echo/v4"
 )
@@ -32,11 +32,13 @@ func (h *Template) initTemplates() error {
 	if err != nil {
 		return err
 	}
+
 	h.templates = t
 	return nil
 }
 
 func parseTemplates() (*template.Template, error) {
+
 	t, err := template.ParseGlob("web/templates/**/*")
 	if err != nil {
 

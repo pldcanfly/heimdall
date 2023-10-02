@@ -2,7 +2,6 @@ package server
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pldcanfly/heimdall/storage"
@@ -26,7 +25,7 @@ type ResponseGraph struct {
 
 type Response struct {
 	Online              bool
-	ResponseTime        time.Duration
+	ResponseTime        int
 	ResponseTimePercent int
 }
 

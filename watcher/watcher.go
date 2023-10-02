@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/pldcanfly/heimdall/storage"
@@ -43,6 +44,8 @@ func (w *WatchMaster) initWatchers() {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println(watchers)
 
 	for i := range watchers {
 		w.AddWatcher(NewHTTPWatcher(watchers[i].ID, watchers[i].URL, w.store))
